@@ -1,0 +1,15 @@
+.Homepage {
+    height: 100vh;
+    background-color: teal;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    transition: all 1s ease-in-out;
+
+    h1 {
+        font-size: 7rem;
+    }
+
+}

@@ -1,25 +1,50 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import SignInAndSignUpPage from "./SignInAndSignUp";
+import { getCurrentUser } from "./appwrite/appwrite.auth";
+import Homepage from "./Homepage";
+import { logoutUser } from "./appwrite/appwrite.auth";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  state = {
+    user: null,
+  };
+
+  componentDidMount() {
+    getCurrentUser().then(
+      (res) => {
+        this.setState({ user: res["$id"] });
+        console.log(res);
+      },
+      (err) => {
+        console.log(err);
+        this.setState({
+          user: null,
+        });
+      }
+    );
+  }
+
+  DeleteSession = ()=> {
+    logoutUser().then(
+      (res) => {
+        this.setState({ user: null });
+        console.log(res);
+      },
+      (err) => console.log(err)
+    );
+  }
+
+  render() {
+    return (
+      <div>
+        {this.state.user === null ? (
+          <SignInAndSignUpPage></SignInAndSignUpPage>
+        ) : (
+          <Homepage logOut={this.DeleteSession} />
+        )}
+      </div>
+    );
+  }
 }
 
 export default App;
